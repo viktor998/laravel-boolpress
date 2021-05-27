@@ -68,7 +68,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ route('admin.posts.index') }}">Home</a>
+                        <a href="{{ route('admin.posts.index') }}">View Posts</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="{{route('admin.posts.create')}}">Add post</a>
+                    <a href="{{route('posts.index')}}">Posts</a>
                 </div>
             </div>
         </div>

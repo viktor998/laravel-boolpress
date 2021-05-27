@@ -19,6 +19,17 @@
 <form action="{{route('admin.posts.update', ['post'=>$post->id])}}" method='post'>
     @csrf
     @method('PUT')
+
+    <div class="form-group">
+    <label for="exampleInputEmail1">Category</label>
+    <select  class="form-control" id="category" name='category_id'>
+      <option value="">Select</option>
+      @foreach($categories as $category)
+        <option value='{{$category->id}}' {{$category->id == old('category_id', $post->category_id)? 'selected': ''}}>{{$category->name}}</option>
+      @endforeach
+    </select>
+    
+  </div>
   <div class="form-group">
     <label for="exampleInputEmail1">Title</label>
     <input type="text" class="form-control" value='{{$post->title}}' name='title' id="exampleInputEmail1" >

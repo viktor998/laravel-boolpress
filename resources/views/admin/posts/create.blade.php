@@ -19,6 +19,17 @@
 <form action="{{route('admin.posts.store')}}" method='post'>
     @csrf
     @method('POST')
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Category</label>
+    <select  class="form-control" id="category" name='category_id'>
+      <option value="">Select</option>
+      @foreach($categories as $category)
+        <option value='{{$category->id}}'>{{$category->name}}</option>
+      @endforeach
+    </select>
+    
+  </div>
   <div class="form-group">
     <label for="exampleInputEmail1">Title</label>
     <input type="text" class="form-control" name='title' id="exampleInputEmail1" >
@@ -28,6 +39,8 @@
     <label for="exampleInputPassword1">Content</label>
     <textarea type="text" name='content' class="form-control" id="exampleInputPassword1"></textarea>
   </div>
+
+  
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
