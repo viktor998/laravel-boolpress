@@ -13,7 +13,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h2>{{ $post->title}}</h2>
-                        <h5>{{$post->category->name}}</h5>
+                        @if($post->category)
+                               
+                            <h5>{{$post->category->name}}</h5>
+                            
+                        @endif
                     </div>
 
                     <div class="card-body">

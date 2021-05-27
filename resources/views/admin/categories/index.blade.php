@@ -3,35 +3,26 @@
 @section('content')
 
 <div class="container">
-<a href="{{route('admin.posts.create')}}">Add Post</a>
-<a href="{{route('admin.categories.index')}}">Categories</a>
+<a href="{{route('admin.categories.create')}}">Create Category</a>
     <div class="row justify-content-center">
     
-    @foreach( $posts as $post)
-        <a href="{{route('admin.posts.show', ['post'=> $post->id])}}">
+    @foreach( $categories as $category)
+        <a href="{{route('admin.categories.show', ['category'=> $category->id])}}">
             <div class="col-md-3">
                 
                 <div class="card">
                     <div class="card-header">
-                        <h2>{{ $post->title}}</h2>
+                        <h2>{{ $category->name}}</h2>
                         
-                        @if($post->category)
-                               
-                            <h5>{{$post->category->name}}</h5>
-                            
-                        @endif
                     </div>
 
-                    <div class="card-body">
-                        {{ $post->content }}
-                    </div>
 
                     <div class="row card-body align-items-center">
                         <div class="col-md-3">
-                            <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}">Edit</a>
+                            <a href="{{route('admin.categories.edit', ['category'=> $category->id])}}">Edit</a>
                         </div>
                         <div class="col-md-3">
-                            <form action="{{route('admin.posts.destroy', ['post'=> $post->id])}}" method='post'>
+                            <form action="{{route('admin.categories.destroy', ['category'=> $category->id])}}" method='post'>
                                 @csrf
                                 @method('DELETE')
                             

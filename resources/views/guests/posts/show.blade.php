@@ -11,9 +11,11 @@
                 <div class="card">
                         <div class="card-header">
                             <h2>{{ $post->title}}</h2>
-                            <a href="{{route('category.index', ['slug'=> $post->category->slug])}}">
-                                <h5>{{$post->category->name}}</h5>
-                            </a>
+                            @if($post->category)
+                                <a href="{{route('category.index', ['slug'=> $post->category->slug])}}">
+                                    <h5>{{$post->category->name}}</h5>
+                                </a>
+                            @endif
                         </div>
 
                     <div class="card-body">
