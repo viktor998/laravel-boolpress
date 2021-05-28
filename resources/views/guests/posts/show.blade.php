@@ -17,7 +17,7 @@
                                 </a>
                             @endif
                         </div>
-
+                        <img src="{{asset($post->cover)}}" class="img-fluid" alt="Responsive image">
                     <div class="card-body">
                         {{ $post->content }}
                     </div>

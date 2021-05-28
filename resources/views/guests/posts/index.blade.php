@@ -19,7 +19,7 @@
                             
                         @endif
                     </div>
-
+                    <img src="{{asset($post->cover)}}" class="img-thumbnail" alt="Responsive image">
                     <div class="card-body">
                         {{ $post->content }}
                     </div>

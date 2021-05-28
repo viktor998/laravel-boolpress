@@ -25,7 +25,7 @@
                     <div class="card-body">
                         {{ $post->content }}
                     </div>
-
+                    <img src="{{asset($post->cover)}}" class="img-fluid" alt="Responsive image">
                     <div class="row card-body align-items-center">
                         <div class="col-md-3">
                             <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}">Edit</a>

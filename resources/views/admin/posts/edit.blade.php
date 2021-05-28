@@ -16,7 +16,7 @@
         </ul>
     </div>
 @endif
-<form action="{{route('admin.posts.update', ['post'=>$post->id])}}" method='post'>
+<form action="{{route('admin.posts.update', ['post'=>$post->id])}}" method='post' enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -38,6 +38,12 @@
   <div class="form-group">
     <label for="exampleInputPassword1">Content</label>
     <textarea type="text" name='content' class="form-control" id="exampleInputPassword1">{{$post->content}}</textarea>
+  </div>
+  <img src="{{asset($post->cover)}}" alt="" class="img-thumbnail">
+  <div class="form-group">
+  
+    <label for="cover">Image</label>
+    <input type="file" name='cover' class="form-control-file" id="cover">
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

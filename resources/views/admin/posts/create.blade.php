@@ -16,7 +16,7 @@
         </ul>
     </div>
 @endif
-<form action="{{route('admin.posts.store')}}" method='post'>
+<form action="{{route('admin.posts.store')}}" method='post' enctype="multipart/form-data">
     @csrf
     @method('POST')
 
@@ -38,6 +38,11 @@
   <div class="form-group">
     <label for="exampleInputPassword1">Content</label>
     <textarea type="text" name='content' class="form-control" id="exampleInputPassword1"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="cover">Image</label>
+    <input type="file" name='cover' class="form-control-file" id="cover">
   </div>
 
   

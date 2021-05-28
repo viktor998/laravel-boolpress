@@ -20,11 +20,18 @@
 
                 <div class="row card-body align-items-center ">
                     <div class="col-md-10">
-                    <p>{{ $post->content}}</p>
+                        <p>{{ $post->content}}</p>
+
+                        <img src="{{asset($post->cover)}}" alt="" class="img-fluid">
                     </div>
+                    
+
+                </div>
+
+                <div class="row card-body">
                     <div class="col-md-1">
-                        <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}">Edit</a>
-                    </div>
+                            <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}">Edit</a>
+                        </div>
                     <div class="col-md-1">
                         <form  action="{{route('admin.posts.destroy', ['post'=> $post->id])}}" method='post'>
                             @csrf
@@ -33,7 +40,6 @@
                             <button type="submit" class="btn btn-primary">Delete</button>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>

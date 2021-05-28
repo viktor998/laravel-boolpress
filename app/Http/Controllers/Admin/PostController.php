@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\SendNewMail;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -46,14 +49,23 @@ class PostController extends Controller
             'category_id' => 'exists:categories,id|nullable',
             'title'=> 'required| string| max:255',
             'content'=> 'required|string',
+            'cover'=>'max:5000|nullable| mimes:jpeg,jpg,png,bmp,gif,svg'
         ]);
         $data = $request->all();
 
+        $cover = NULL;
+        if(array_key_exists('cover', $data)){
+            $cover = Storage::put('uploads', $data['cover']);
+        }
+        
         $post = new Post();
 
         $post->fill($data);
         $post->slug= $this->genSlag($post->title);
+        $post->cover = 'storage/'. $cover;
         $post->save();
+
+        Mail::to('post@add.gmail.it')->send(new SendNewMail());
         
         return redirect()->route('admin.posts.index');
     }
@@ -92,10 +104,18 @@ class PostController extends Controller
     {
         $request->validate([
             'title'=> 'required| string| max:255',
-            'content'=> 'required|string'
+            'content'=> 'required|string',
+            'cover'=>'max:5000|nullable| mimes:jpeg,jpg,png,bmp,gif,svg'
+
         ]);
         $data = $request->all();
         $data['slug']= $this->genSlag($data['title'], $post->title != $data['title']);
+
+        if(array_key_exists('cover', $data)){
+            $cover = Storage::put('uploads', $data['cover']);
+            $data['cover'] = 'storage/'. $cover;
+        }
+
         $post->update($data);
         
         return redirect()->route('admin.posts.index');
