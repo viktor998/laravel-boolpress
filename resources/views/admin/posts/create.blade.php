@@ -45,6 +45,17 @@
     <input type="file" name='cover' class="form-control-file" id="cover">
   </div>
 
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Category</label>
+    <select  class="form-control" id="category" name='tag_ids[]' multiple>
+      @foreach($tags as $tag)
+        <option value='{{$tag->id}}'>{{$tag->name}}</option>
+      @endforeach
+    </select>
+    
+  </div>
+
   
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

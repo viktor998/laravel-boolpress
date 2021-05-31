@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Category;
+use App\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags= Tag::all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -49,8 +51,11 @@ class PostController extends Controller
             'category_id' => 'exists:categories,id|nullable',
             'title'=> 'required| string| max:255',
             'content'=> 'required|string',
-            'cover'=>'max:5000|nullable| mimes:jpeg,jpg,png,bmp,gif,svg'
+            'cover'=>'max:5000|nullable| mimes:jpeg,jpg,png,bmp,gif,svg',
+            'tag_ids.*'=>'exists:tags,id'
         ]);
+
+        
         $data = $request->all();
 
         $cover = NULL;
@@ -64,6 +69,10 @@ class PostController extends Controller
         $post->slug= $this->genSlag($post->title);
         $post->cover = 'storage/'. $cover;
         $post->save();
+
+        if(array_key_exists('tag_ids', $data)){
+            $post->tags()->attach($data['tag_ids']);
+        }
 
         Mail::to('post@add.gmail.it')->send(new SendNewMail());
         
@@ -90,7 +99,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories= Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -105,11 +115,11 @@ class PostController extends Controller
         $request->validate([
             'title'=> 'required| string| max:255',
             'content'=> 'required|string',
-            'cover'=>'max:5000|nullable| mimes:jpeg,jpg,png,bmp,gif,svg'
-
+            'cover'=>'max:5000|nullable| mimes:jpeg,jpg,png,bmp,gif,svg',
+            'tag_ids.*'=>'exists:tags,id'
         ]);
         $data = $request->all();
-        $data['slug']= $this->genSlag($data['title'], $post->title != $data['title']);
+        $data['slug']= $this->genSlag($data['title'], $post->title != $data['title'], $post->slug);
 
         if(array_key_exists('cover', $data)){
             $cover = Storage::put('uploads', $data['cover']);
@@ -117,6 +127,12 @@ class PostController extends Controller
         }
 
         $post->update($data);
+
+        if(array_key_exists('tag_ids', $data)){
+            $post->tags()->sync($data['tag_ids']);
+        }else{
+            $post->tags()->detach();
+        }
         
         return redirect()->route('admin.posts.index');
     }
@@ -134,13 +150,13 @@ class PostController extends Controller
         return redirect()->route('admin.posts.index');
     }
 
-    private function genSlag(string $title, bool $changed = true){
-        $slug = Str::slug($title, '-');
+    private function genSlag(string $title, bool $changed = true, string $old_slug = ''){
+        
 
         if(!$changed){
-            return $slug;
+            return $old_slug;
         }
-
+        $slug = Str::slug($title, '-');
         $slug_base=$slug;
         $counter= 1;
         $post_with_slug = Post::where('slug', '=', $slug)->first();

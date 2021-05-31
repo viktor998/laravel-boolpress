@@ -5,6 +5,7 @@
 <div class="container">
 <a href="{{route('admin.posts.create')}}">Add Post</a>
 <a href="{{route('admin.categories.index')}}">Categories</a>
+<a href="{{route('admin.tags.index')}}">Tags</a>
     <div class="row justify-content-center">
     
     @foreach( $posts as $post)
@@ -26,10 +27,16 @@
                         {{ $post->content }}
                     </div>
                     <img src="{{asset($post->cover)}}" class="img-fluid" alt="Responsive image">
+                        <div class="col-md-12">
+                            @foreach($post->tags as $tag)
+                                <a href="{{route('tag.index', ['slug'=> $tag->slug])}}">#{{$tag->name}}</a>
+                            @endforeach
+                        </div>
                     <div class="row card-body align-items-center">
                         <div class="col-md-3">
                             <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}">Edit</a>
                         </div>
+                        
                         <div class="col-md-3">
                             <form action="{{route('admin.posts.destroy', ['post'=> $post->id])}}" method='post'>
                                 @csrf
